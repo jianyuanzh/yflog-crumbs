@@ -34,7 +34,7 @@ public class AuthSimulator {
 
 
         HttpServerProvider provider = HttpServerProvider.provider();
-        HttpServer server = provider.createHttpServer(new InetSocketAddress("127.0.0.1", port), 100000);
+        HttpServer server = provider.createHttpServer(new InetSocketAddress("0.0.0.0", port), 100000);
         final AtomicLong handler = new AtomicLong(0);
 
 
