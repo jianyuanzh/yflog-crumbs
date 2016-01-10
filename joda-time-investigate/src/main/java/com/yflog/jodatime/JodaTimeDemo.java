@@ -18,7 +18,10 @@ public class JodaTimeDemo {
             DateTimeFormat.forPattern("yyyy-MM-ddHH:mm:ss.SSS").getParser(),
             DateTimeFormat.forPattern("yyyy-MM-ddHH:mm:ss").getParser(),
             // All ISO8601 formats (use 'T' as separator)
-            ISODateTimeFormat.dateTimeParser().withOffsetParsed().getParser(),
+//            ISODateTimeFormat.dateTimeParser().getParserser(),
+            DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZZ").getParser(),
+            DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSS").getParser(),
+            DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss").getParser(),
 
             // Fri Jun 07 09:27:37 GMT 2015
             DateTimeFormat.forPattern("EEE MMM dd HH:mm:ss zzz yyyy").getParser(),
@@ -43,11 +46,11 @@ public class JodaTimeDemo {
     private static void testHttpTimes() {
         String iso = "2016-02-09T22:23:32.000-06:00";
 
-        String http         = "Wed, 09 Feb 2016 22:23:32 CST";
-        String ctime_3      = "Wed Feb 9 22:23:32 CST 2016";
-        String ansic        = "Wed Feb 9 22:23:32 2016";
-        String rfc850       = "Wednesday, 09-Feb-16 22:23:32 CST";
-        String brokenRFC850 = "Wednesday, 09-Feb-2016 22:23:32 CST";
+        String http         = "Tue, 09 Feb 2016 22:23:32 CST";
+        String ctime_3      = "Tue Feb 9 22:23:32 CST 2016";
+        String ansic        = "Tue Feb 9 22:23:32 2016";
+        String rfc850       = "Tue, 09-Feb-16 22:23:32 CST";
+        String brokenRFC850 = "Tue, 09-Feb-2016 22:23:32 CST";
 
         String httpNoWeek   = "09 Feb 2016 22:23:32 CST";
         String rfc850NoWeek = "09-Feb-16 22:23:32 CST";
@@ -59,8 +62,11 @@ public class JodaTimeDemo {
 
         DateTimeFormatter fmtter = new DateTimeFormatterBuilder().append(null, parsers).toFormatter();
 
-        System.out.println("http          compare:\t\t" + fmtter.parseDateTime(http).toString());
-        System.out.println("cTime3        compare:\t\t"  + fmtter.parseDateTime(ctime_3).toString());
+
+
+        System.out.println("ISO8601       compare:\t\t" + fmtter.parseDateTime(iso) + " timestamp: " + fmtter.parseDateTime(iso).toDate().getTime());
+        System.out.println("http          compare:\t\t" +  fmtter.parseDateTime(http).toString() + " timestamp: " + fmtter.parseDateTime(http).toDate().getTime());
+        System.out.println("cTime3        compare:\t\t"  + fmtter.parseDateTime(ctime_3).toString() + " timestamp: " + fmtter.parseDateTime(ctime_3).toDate().getTime());
         System.out.println("ANSI C        compare:\t\t" + fmtter.parseDateTime(ansic).toString());
         System.out.println("RFC850        compare:\t\t" + fmtter.parseDateTime(rfc850).toString());
         System.out.println("Borken RFC850 compare:\t\t" + fmtter.parseDateTime(brokenRFC850).toString());
