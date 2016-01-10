@@ -3,9 +3,6 @@ package com.yflog.jodatime;
 import org.joda.time.DateTime;
 import org.joda.time.format.*;
 
-import java.util.Arrays;
-import java.util.TimeZone;
-
 /**
  * Created by vincent on 1/10/16.
  * Three-letter time zone IDs For compatibility with JDK 1.1.x,
@@ -44,11 +41,35 @@ public class JodaTimeDemo {
     };
 
     private static void testHttpTimes() {
-        String iso = "1994-02-09T22:23:32.000-06:00";
+        String iso = "2016-02-09T22:23:32.000-06:00";
 
-        String http = "Wed, 09 Feb 1994 22:23:32 CST";
+        String http         = "Wed, 09 Feb 2016 22:23:32 CST";
+        String ctime_3      = "Wed Feb 9 22:23:32 CST 2016";
+        String ansic        = "Wed Feb 9 22:23:32 2016";
+        String rfc850       = "Wednesday, 09-Feb-16 22:23:32 CST";
+        String brokenRFC850 = "Wednesday, 09-Feb-2016 22:23:32 CST";
+
+        String httpNoWeek   = "09 Feb 2016 22:23:32 CST";
+        String rfc850NoWeek = "09-Feb-16 22:23:32 CST";
+        String brokenRFC850NoWeek = "09-Feb-2016 22:23:32 CST";
+
+        String commonLog    = "09/Feb/2016:22:23:32 -0600";
+
+
+
         DateTimeFormatter fmtter = new DateTimeFormatterBuilder().append(null, parsers).toFormatter();
-        System.out.println(fmtter.parseDateTime(http));
+
+        System.out.println("http          compare:\t\t" + fmtter.parseDateTime(http).toString());
+        System.out.println("cTime3        compare:\t\t"  + fmtter.parseDateTime(ctime_3).toString());
+        System.out.println("ANSI C        compare:\t\t" + fmtter.parseDateTime(ansic).toString());
+        System.out.println("RFC850        compare:\t\t" + fmtter.parseDateTime(rfc850).toString());
+        System.out.println("Borken RFC850 compare:\t\t" + fmtter.parseDateTime(brokenRFC850).toString());
+
+        System.out.println("CommonLog     compare:\t\t" + fmtter.parseDateTime(commonLog).toString());
+        System.out.println("http no week  compare:\t\t" + fmtter.parseDateTime(httpNoWeek).toString());
+        System.out.println("RFC850 noWeek compare:\t\t" + fmtter.parseDateTime(rfc850NoWeek).toString());
+        System.out.println("Broken RFC850 noWeek :\t\t" + fmtter.parseDateTime(brokenRFC850NoWeek).toString());
+
     }
 
 
