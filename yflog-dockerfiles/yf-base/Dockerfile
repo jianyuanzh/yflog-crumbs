@@ -6,6 +6,6 @@ RUN apt-get install -y wget vim tar unzip openssh-server openssh-client
 
 RUN mkdir /var/run/sshd
 
-RUN echo "root:!!!L0g1cm0n" | chpasswd
+RUN echo "root:testuser" | chpasswd
 
 CMD /usr/sbin/sshd -D
