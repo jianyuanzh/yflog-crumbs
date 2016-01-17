@@ -1,6 +1,7 @@
 package com.yflog.jodatime;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.joda.time.format.*;
 
 /**
@@ -65,7 +66,7 @@ public class JodaTimeDemo {
 
 
         System.out.println("ISO8601       compare:\t\t" + fmtter.parseDateTime(iso) + " timestamp: " + fmtter.parseDateTime(iso).toDate().getTime());
-        System.out.println("http          compare:\t\t" +  fmtter.parseDateTime(http).toString() + " timestamp: " + fmtter.parseDateTime(http).toDate().getTime());
+        System.out.println("http          compare:\t\t" + fmtter.parseDateTime(http).toString() + " timestamp: " + fmtter.parseDateTime(http).toDate().getTime());
         System.out.println("cTime3        compare:\t\t"  + fmtter.parseDateTime(ctime_3).toString() + " timestamp: " + fmtter.parseDateTime(ctime_3).toDate().getTime());
         System.out.println("ANSI C        compare:\t\t" + fmtter.parseDateTime(ansic).toString());
         System.out.println("RFC850        compare:\t\t" + fmtter.parseDateTime(rfc850).toString());
@@ -80,7 +81,24 @@ public class JodaTimeDemo {
 
 
     public static void main(String[] args) {
-        testHttpTimes();
+
+        DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd 'T' HH:mm:ss.SSSZZ");
+        DateTime time  = new DateTime(DateTimeZone.UTC);
+        String reportTime= formatter.print(time);
+
+        System.out.println(reportTime);
+
+//        testHttpTimes();
+        test();
+        printTime();
+    }
+
+    private static void test() {
+        DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/MMM/yyy:HH:mm:ss zzz");
+        DateTime time  = new DateTime(DateTimeZone.forOffsetHours(0));
+
+
+        System.out.println(formatter.print(time));
     }
 
     private static void printTime() {
@@ -96,8 +114,11 @@ public class JodaTimeDemo {
                 .appendTimeZoneName().appendLiteral(' ')
                 .appendYear(4, 4).toFormatter();
 
+        System.out.println(formatter.toString());
+
         DateTime time = new DateTime();
         System.out.println(time.toString());
         String timeStr = formatter.print(time);
+        System.out.println(timeStr);
     }
 }
