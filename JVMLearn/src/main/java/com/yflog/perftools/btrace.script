@@ -1,0 +1,21 @@
+/* BTrace Script Template */
+import com.sun.btrace.annotations.*;
+import static com.sun.btrace.BTraceUtils.*;
+
+@BTrace
+public class TracingScript {
+    @OnMethod(
+        clazz="com.yflog.perftools.BTraceTest",
+        method="add",
+        location=@Location(Kind.RETURN)
+    )
+
+    public static void func(@Self com.yflog.perftools.BTraceTest instance, int a, int b, @Return int result){
+        println("Call stack:");
+        jstack();
+        println(strcat("Param A:", str(a)));
+        println(strcat("Param B:", str(b))) ;
+        println(strcat("result:", str(result)));
+    }
+	/* put your code here */
+}

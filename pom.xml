@@ -12,6 +12,7 @@
         <module>joda-time-investigate</module>
         <module>server-auth-sim</module>
         <module>snmp-trap</module>
+        <module>JVMLearn</module>
     </modules>
 
 
