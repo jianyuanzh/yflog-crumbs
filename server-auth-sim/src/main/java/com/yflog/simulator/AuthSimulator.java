@@ -39,7 +39,7 @@ public class AuthSimulator {
 
 
         HttpContext context = server.createContext("/", new HttpHandler() {
-            @Override
+
             public void handle(HttpExchange httpExchange) throws IOException {
 
                 System.out.println("handle the request");
