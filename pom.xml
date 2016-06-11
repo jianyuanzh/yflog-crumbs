@@ -14,6 +14,9 @@
         <module>snmp-trap</module>
         <module>JVMLearn</module>
         <module>httpclient-demo</module>
+        <module>mysql-connector</module>
+        <module>maria-connector</module>
+        <module>snmp-crumbs</module>
     </modules>
 
     <dependencies>

@@ -18,7 +18,30 @@ public class AuthSimulator {
     private static String _username = "vincent";
     private static String _password = "vincent";
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws IOException {
+        HttpServer server = HttpServer.create(new InetSocketAddress(8888), 0);
+        HttpContext cc  = server.createContext("/test", new MyHandler());
+        cc.setAuthenticator(new BasicAuthenticator("test") {
+            @Override
+            public boolean checkCredentials(String user, String pwd) {
+                return user.equals("test") && pwd.equals("test");
+            }
+        });
+        server.setExecutor(null); // creates a default executor
+        server.start();
+    }
+
+    static class MyHandler implements HttpHandler {
+        public void handle(HttpExchange t) throws IOException {
+            String response = "This is the response";
+            t.sendResponseHeaders(200, response.length());
+            OutputStream os = t.getResponseBody();
+            os.write(response.getBytes());
+            os.close();
+        }
+    }
+
+    public static void main1(String[] args) throws Exception {
 
         if (args.length < 1) {
             System.out.println("Usage:\n\tHttpServer port username password");
@@ -60,19 +83,19 @@ public class AuthSimulator {
                     int basic = authorization.indexOf(32);
                     if (basic != -1 && authorization.substring(0, basic).equals("Basic")) {
 
-                        byte[] var5 = new BASE64Decoder().decodeBuffer(authorization.substring(basic + 1));
-                        String var6 = new String(var5);
-                        int var7 = var6.indexOf(58);
-                        String username = var6.substring(0, var7);
-                        String password = var6.substring(var7 + 1);
+                        byte[] buffer = new BASE64Decoder().decodeBuffer(authorization.substring(basic + 1));
+                        String authStr = new String(buffer);
+                        int var7 = authStr.indexOf(58);
+                        String username = authStr.substring(0, var7);
+                        String password = authStr.substring(var7 + 1);
                         System.out.printf("username=%s, password=%s\n", username, password);
 
                         boolean authOk = _username.equalsIgnoreCase(username) && _password.equalsIgnoreCase(password);
                         if (!authOk) {
-                            Headers var10 = httpExchange.getResponseHeaders();
-                            var10.set("WWW-Authenticate", "Basic realm=\"/\"");
+                            Headers respHeaders = httpExchange.getResponseHeaders();
+//                            respHeaders.set("WWW-Authenticate", "Basic realm=\"/\"");
                             status = 401;
-                            body = "wrong username or password";
+                            body = "<!DOCTYPE html><html><head><title>Apache Tomcat/8.0.23 - Error report</title><style type=\"text/css\">H1 {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;font-size:22px;} H2 {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;font-size:16px;} H3 {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;font-size:14px;} BODY {font-family:Tahoma,Arial,sans-serif;color:black;background-color:white;} B {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;} P {font-family:Tahoma,Arial,sans-serif;background:white;color:black;font-size:12px;}A {color : black;}A.name {color : black;}.line {height: 1px; background-color: #525D76; border: none;}</style> </head><body><h1>HTTP Status 401 - Unauthorized</h1><div class=\"line\"></div><p><b>type</b> Status report</p><p><b>message</b> <u>Unauthorized</u></p><p><b>description</b> <u>This request requires HTTP authentication.</u></p><hr class=\"line\"><h3>Apache Tomcat/8.0.23</h3></body></html>";
                         }
                     }
                     else {
@@ -82,7 +105,7 @@ public class AuthSimulator {
                 }
 
                 System.out.printf("Write back response, status=%d, body=%s\n", status, body);
-                byte[] response = body.getBytes();
+                 byte[] response = body.getBytes();
                 httpExchange.sendResponseHeaders(status, response.length);
                 OutputStream out = httpExchange.getResponseBody();
                 out.write(response);
@@ -91,13 +114,14 @@ public class AuthSimulator {
             }
         });
 
-        context.setAuthenticator(new BasicAuthenticator("/") {
-            @Override
-            public boolean checkCredentials(String username, String password) {
-                System.out.printf("user=%s, passwd=%s\n", username, password);
-                return _username.equals(username) && _password.equals(password);
-            }
-        });
+//        context.setAuthenticator(new BasicAuthenticator("/") {
+//            @Override
+//            public boolean checkCredentials(String username, String password) {
+//                System.out.printf("user=%s, passwd=%s\n", username, password);
+////                return _username.equals(username) && _password.equals(password);
+//                return true;
+//            }
+//        });
 
         server.setExecutor(Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()));
         server.start();
