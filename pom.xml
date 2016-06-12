@@ -17,6 +17,7 @@
         <module>mysql-connector</module>
         <module>maria-connector</module>
         <module>snmp-crumbs</module>
+        <module>JCiP</module>
     </modules>
 
     <dependencies>
